@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   sqflite: ^2.3.0
+  syncfusion_flutter_charts: ^22.2.10
 
 dev_dependencies:
   flutter_test:

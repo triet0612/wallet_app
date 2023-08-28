@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:wallet_app/model/model.dart';
@@ -52,5 +54,45 @@ class DBProvider {
       username: users.first['username'],
       balance: users.first['balance'],
     );
+  }
+
+  List<History> mockHistory() {
+    return [
+      History(
+        time: DateTime.now().subtract(const Duration(days: 6)),
+        balanceusage: Random().nextInt(100000) + 100000,
+        category: "Groceries",
+      ),
+      History(
+        time: DateTime.now().subtract(const Duration(days: 5)),
+        balanceusage: Random().nextInt(100000) + 100000,
+        category: "Groceries",
+      ),
+      History(
+        time: DateTime.now().subtract(const Duration(days: 4)),
+        balanceusage: Random().nextInt(100000) + 100000,
+        category: "Groceries",
+      ),
+      History(
+        time: DateTime.now().subtract(const Duration(days: 3)),
+        balanceusage: Random().nextInt(100000) + 100000,
+        category: "Groceries",
+      ),
+      History(
+        time: DateTime.now().subtract(const Duration(days: 2)),
+        balanceusage: Random().nextInt(100000) + 100000,
+        category: "Groceries",
+      ),
+      History(
+        time: DateTime.now().subtract(const Duration(days: 1)),
+        balanceusage: Random().nextInt(100000) + 100000,
+        category: "Groceries",
+      ),
+      History(
+        time: DateTime.now(),
+        balanceusage: Random().nextInt(100000) + 100000,
+        category: "Groceries",
+      ),
+    ];
   }
 }

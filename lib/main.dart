@@ -12,7 +12,11 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const Home(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const Home(),
+        '/userpage': (context) => const Home(),
+      },
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.purple[900],
@@ -30,6 +34,9 @@ class MainApp extends StatelessWidget {
           displayLarge: TextStyle(fontSize: 32),
           titleLarge: TextStyle(fontSize: 24),
           bodyMedium: TextStyle(fontSize: 20),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.teal.shade900,
         ),
       ),
     );
