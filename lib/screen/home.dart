@@ -53,7 +53,9 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               icon: const Icon(Icons.account_circle_outlined),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/userpage');
+              },
             )
           ],
         ),
@@ -91,7 +93,7 @@ class _BalanceCard extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color.fromARGB(255, 0, 78, 3),
+        color: Colors.teal.shade900,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,11 +122,11 @@ class _BalanceChart extends StatelessWidget {
       primaryYAxis: NumericAxis(
         rangePadding: ChartRangePadding.round,
       ),
-      title: ChartTitle(text: 'Balance history'),
+      title: ChartTitle(text: '7-days report'),
       series: <LineSeries<History, String>>[
         LineSeries(
             markerSettings:
-                MarkerSettings(isVisible: true, color: Colors.pink[300]),
+                MarkerSettings(isVisible: true, color: Colors.pink.shade300),
             dataSource: history!,
             xValueMapper: (History hs, _) {
               var t = hs.time;

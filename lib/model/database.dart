@@ -56,6 +56,14 @@ class DBProvider {
     );
   }
 
+  Future submitUser(User user) async {
+    var dbClient = await db;
+    dbClient.rawUpdate('UPDATE User SET username = ?, balance = ?;',
+        [user.username, user.balance]);
+    dbClient.rawDelete('DELETE FROM History;');
+    return;
+  }
+
   List<History> mockHistory() {
     return [
       History(
