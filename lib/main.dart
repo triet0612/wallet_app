@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/screen/home.dart';
+import 'package:wallet_app/screen/report.dart';
 import 'package:wallet_app/screen/userinfo.dart';
 
 void main() {
@@ -17,6 +18,7 @@ class MainApp extends StatelessWidget {
       routes: {
         '/': (context) => const Home(),
         '/userpage': (context) => const UserInfo(),
+        '/report': (context) => const Report(),
       },
       theme: ThemeData(
         brightness: Brightness.dark,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:wallet_app/components/appbar.dart';
 import 'package:wallet_app/model/database.dart';
 import 'package:wallet_app/model/model.dart';
 
@@ -12,12 +12,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   User _user = const User(username: "", balance: 0.0);
-  List<History> _hist = [];
   @override
   void initState() {
     super.initState();
     _readUser();
-    _readHistory();
   }
 
   void _readUser() async {
@@ -25,23 +23,6 @@ class _HomeState extends State<Home> {
     setState(() {
       _user = temp;
     });
-  }
-
-  void _readHistory() {
-    setState(() {
-      _hist = DBProvider().mockHistory();
-    });
-  }
-
-  void _onTapped(int index) {
-    if (index == 0) {
-      return;
-    }
-    switch (index) {
-      case 1:
-        Navigator.of(context).popAndPushNamed('/');
-        break;
-    }
   }
 
   @override
@@ -62,20 +43,9 @@ class _HomeState extends State<Home> {
         body: Column(
           children: [
             Expanded(flex: 1, child: _BalanceCard(user: _user)),
-            Expanded(
-              flex: 3,
-              child: _BalanceChart(history: _hist),
-            ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          ],
-          currentIndex: 0,
-          onTap: _onTapped,
-        ),
+        bottomNavigationBar: const BottomBar(index: 0),
       ),
     );
   }
@@ -107,33 +77,6 @@ class _BalanceCard extends StatelessWidget {
           Text("${user!.username}'s balance"),
         ],
       ),
-    );
-  }
-}
-
-class _BalanceChart extends StatelessWidget {
-  final List<History>? history;
-  const _BalanceChart({required this.history});
-
-  @override
-  Widget build(BuildContext context) {
-    return SfCartesianChart(
-      primaryXAxis: CategoryAxis(labelRotation: 45),
-      primaryYAxis: NumericAxis(
-        rangePadding: ChartRangePadding.round,
-      ),
-      title: ChartTitle(text: '7-days report'),
-      series: <LineSeries<History, String>>[
-        LineSeries(
-            markerSettings:
-                MarkerSettings(isVisible: true, color: Colors.pink.shade300),
-            dataSource: history!,
-            xValueMapper: (History hs, _) {
-              var t = hs.time;
-              return "${t.year}-${t.month}-${t.day}";
-            },
-            yValueMapper: (History hs, _) => hs.balanceusage)
-      ],
     );
   }
 }
