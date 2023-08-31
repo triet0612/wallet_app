@@ -70,9 +70,15 @@ class _UserInfoState extends State<UserInfo> {
             children: [
               const Padding(padding: EdgeInsets.all(10)),
               const Text('Username'),
-              FormInputUser(callback: _updateName),
+              FormInputUser(
+                callback: _updateName,
+                textInputType: TextInputType.text,
+              ),
               const Text('Balance Amount'),
-              FormInputUser(callback: _updateBalance),
+              FormInputUser(
+                callback: _updateBalance,
+                textInputType: TextInputType.number,
+              ),
               SubmitButton(callback: _submitUser),
             ],
           ),

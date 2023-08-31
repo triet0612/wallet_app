@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 class FormInputUser extends StatelessWidget {
   final ValueSetter? callback;
-  const FormInputUser({super.key, this.callback});
+  final TextInputType? textInputType;
+  const FormInputUser({super.key, this.callback, this.textInputType});
 
   @override
   Widget build(Object context) {
     return Card(
       child: Form(
         child: TextFormField(
-          keyboardType: TextInputType.number,
+          keyboardType: textInputType,
           autovalidateMode: AutovalidateMode.always,
           onChanged: (value) {
             try {

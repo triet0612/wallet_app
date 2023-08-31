@@ -19,7 +19,7 @@ class DBProvider {
     String path = join(await getDatabasesPath(), 'wallet.db');
     var db = await openDatabase(
       path,
-      version: 1,
+      version: 3,
       onCreate: _onCreate,
       singleInstance: true,
     );
@@ -32,11 +32,23 @@ class DBProvider {
         'CREATE TABLE History(time TEXT, balanceusage REAL, category TEXT);';
     const populateUser =
         '''INSERT INTO User(username, balance) VALUES('user0', 0);''';
+    const populateHistory = '''INSERT INTO History(time, balanceusage, category)
+VALUES
+	('2023-08-20 00:01:00', 500000, "Housing & Utilities"),
+	('2023-08-22 00:02:00', 200000, "Groceries"),
+	('2023-08-24 00:03:00', 2000000, "Healthcare"),
+	('2023-08-24 00:04:00', 50000, "Transportation"),
+	('2023-08-25 00:05:00', 1000000, "Groceries"),
+	('2023-08-25 00:06:00', 100000, "Online services"),
+	('2023-08-30 00:07:00', 500000, "Personal / Other"),
+	('2023-08-30 00:08:00', 200000, "Groceries"),
+	('2023-08-31 00:09:00', 10000, "Transportation");''';
 
     try {
       await db.execute(createUser);
       await db.execute(createHistory);
       await db.execute(populateUser);
+      await db.execute(populateHistory);
     } catch (e) {
       rethrow;
     }
@@ -64,43 +76,53 @@ class DBProvider {
     return;
   }
 
-  List<History> mockHistory() {
-    return [
-      History(
-        time: DateTime.now().subtract(const Duration(days: 6)),
-        balanceusage: Random().nextInt(100000) + 100000,
-        category: "Groceries",
-      ),
-      History(
-        time: DateTime.now().subtract(const Duration(days: 5)),
-        balanceusage: Random().nextInt(100000) + 100000,
-        category: "Groceries",
-      ),
-      History(
-        time: DateTime.now().subtract(const Duration(days: 4)),
-        balanceusage: Random().nextInt(100000) + 100000,
-        category: "Groceries",
-      ),
-      History(
-        time: DateTime.now().subtract(const Duration(days: 3)),
-        balanceusage: Random().nextInt(100000) + 100000,
-        category: "Groceries",
-      ),
-      History(
-        time: DateTime.now().subtract(const Duration(days: 2)),
-        balanceusage: Random().nextInt(100000) + 100000,
-        category: "Groceries",
-      ),
-      History(
-        time: DateTime.now().subtract(const Duration(days: 1)),
-        balanceusage: Random().nextInt(100000) + 100000,
-        category: "Groceries",
-      ),
-      History(
-        time: DateTime.now(),
-        balanceusage: Random().nextInt(100000) + 100000,
-        category: "Groceries",
-      ),
-    ];
+  Future createHistory(History history) async {
+    var dbClient = await db;
+    await dbClient.execute(
+        'UPDATE User SET balance = balance - ?', [history.balanceusage]);
+    await dbClient.execute(
+        'INSERT INTO History(time, balanceusage, category) VALUES(?, ?, ?);', [
+      history.time.toString(),
+      history.balanceusage,
+      history.category.toString()
+    ]);
+    return;
+  }
+
+  Future<List<History>> readHistory() async {
+    var dbClient = await db;
+    var rows = await dbClient
+        .query('History', columns: ['time', 'balanceusage', 'category']);
+    return rows
+        .map((row) => History(
+            time: DateTime.parse(row['time'].toString()),
+            balanceusage: double.parse(row['balanceusage'].toString()),
+            category: row['category'].toString()))
+        .where((row) => DateTime.now().difference(row.time).inDays < 7)
+        .toList();
+  }
+
+  Future<List<History>> readAllTimeReport() async {
+    var dbClient = await db;
+    var rows = await dbClient.rawQuery(
+        'SELECT h.time AS time, SUM(h.balanceusage) AS balanceusage, category FROM History h GROUP BY DATE(h.time);');
+    return rows
+        .map((row) => History(
+            time: DateTime.parse(row['time'].toString()),
+            balanceusage: double.parse(row['balanceusage'].toString()),
+            category: row['category'].toString()))
+        .toList();
+  }
+
+  Future<List<History>> readHistoryByCategory() async {
+    var dbClient = await db;
+    var rows = await dbClient.rawQuery(
+        'SELECT h.time, SUM(h.balanceusage) AS balanceusage, category FROM History h GROUP BY h.category;');
+    return rows
+        .map((row) => History(
+            time: DateTime.parse(row['time'].toString()),
+            balanceusage: double.parse(row['balanceusage'].toString()),
+            category: row['category'].toString()))
+        .toList();
   }
 }

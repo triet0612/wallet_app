@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/components/appbar.dart';
+import 'package:wallet_app/components/form.dart';
 import 'package:wallet_app/model/database.dart';
 import 'package:wallet_app/model/model.dart';
 
@@ -28,7 +29,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+        child: GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Home"),
           actions: [
@@ -43,11 +49,12 @@ class _HomeState extends State<Home> {
         body: Column(
           children: [
             Expanded(flex: 1, child: _BalanceCard(user: _user)),
+            Expanded(flex: 3, child: _AddHistory())
           ],
         ),
         bottomNavigationBar: const BottomBar(index: 0),
       ),
-    );
+    ));
   }
 }
 
@@ -77,6 +84,70 @@ class _BalanceCard extends StatelessWidget {
           Text("${user!.username}'s balance"),
         ],
       ),
+    );
+  }
+}
+
+class _AddHistory extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _AddHistoryState();
+}
+
+class _AddHistoryState extends State<_AddHistory> {
+  History _history =
+      History(time: DateTime.now(), balanceusage: 0, category: "Groceries");
+  List dropdownCategories = [
+    "Groceries",
+    "Housing & Utilities",
+    "Transportation",
+    "Healthcare",
+    "Personal / Other",
+    "Online services",
+  ];
+
+  void updateBalanceUsage(value) {
+    setState(() {
+      _history = History(
+          time: DateTime.now(),
+          balanceusage: double.parse(value),
+          category: _history.category);
+    });
+  }
+
+  void updateCategories(String? value) {
+    setState(() {
+      _history = History(
+          time: DateTime.now(),
+          balanceusage: _history.balanceusage,
+          category: value!);
+    });
+  }
+
+  void submit() {
+    DBProvider().createHistory(_history);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Padding(padding: EdgeInsets.all(10)),
+        const Text("Report your spending"),
+        FormInputUser(
+          callback: updateBalanceUsage,
+          textInputType: TextInputType.number,
+        ),
+        DropdownMenu<String>(
+          initialSelection: dropdownCategories.first,
+          onSelected: updateCategories,
+          dropdownMenuEntries: dropdownCategories
+              .map((value) =>
+                  DropdownMenuEntry<String>(value: value, label: value))
+              .toList(),
+        ),
+        const Padding(padding: EdgeInsets.all(10)),
+        SubmitButton(callback: submit),
+      ],
     );
   }
 }
