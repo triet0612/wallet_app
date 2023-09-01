@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:wallet_app/model/model.dart';
@@ -76,7 +74,16 @@ VALUES
     return;
   }
 
+  Future addBalance(double add) async {
+    var dbClient = await db;
+    dbClient.rawUpdate('UPDATE User SET balance = balance + ?', [add]);
+    return;
+  }
+
   Future createHistory(History history) async {
+    if (history.balanceusage <= 0) {
+      return;
+    }
     var dbClient = await db;
     await dbClient.execute(
         'UPDATE User SET balance = balance - ?', [history.balanceusage]);
@@ -98,7 +105,6 @@ VALUES
             time: DateTime.parse(row['time'].toString()),
             balanceusage: double.parse(row['balanceusage'].toString()),
             category: row['category'].toString()))
-        .where((row) => DateTime.now().difference(row.time).inDays < 7)
         .toList();
   }
 

@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: const Text("Home"),
           actions: [
@@ -46,10 +46,11 @@ class _HomeState extends State<Home> {
             )
           ],
         ),
-        body: Column(
+        body: ListView(
           children: [
             Expanded(flex: 1, child: _BalanceCard(user: _user)),
-            Expanded(flex: 3, child: _AddHistory())
+            Expanded(flex: 2, child: _AddHistory()),
+            Expanded(flex: 2, child: _ReportSalary()),
           ],
         ),
         bottomNavigationBar: const BottomBar(index: 0),
@@ -66,6 +67,7 @@ class _BalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      height: 140,
       margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -90,7 +92,7 @@ class _BalanceCard extends StatelessWidget {
 
 class _AddHistory extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _AddHistoryState();
+  State<_AddHistory> createState() => _AddHistoryState();
 }
 
 class _AddHistoryState extends State<_AddHistory> {
@@ -125,6 +127,7 @@ class _AddHistoryState extends State<_AddHistory> {
 
   void submit() {
     DBProvider().createHistory(_history);
+    Navigator.of(context).popAndPushNamed('/');
   }
 
   @override
@@ -144,6 +147,42 @@ class _AddHistoryState extends State<_AddHistory> {
               .map((value) =>
                   DropdownMenuEntry<String>(value: value, label: value))
               .toList(),
+        ),
+        const Padding(padding: EdgeInsets.all(10)),
+        SubmitButton(callback: submit),
+      ],
+    );
+  }
+}
+
+class _ReportSalary extends StatefulWidget {
+  @override
+  State<_ReportSalary> createState() => _ReportSalaryState();
+}
+
+class _ReportSalaryState extends State<_ReportSalary> {
+  double _addAmount = 0.0;
+
+  void updateBalanceUsage(value) {
+    setState(() {
+      _addAmount = double.parse(value);
+    });
+  }
+
+  void submit() {
+    DBProvider().addBalance(_addAmount);
+    Navigator.of(context).popAndPushNamed('/');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Padding(padding: EdgeInsets.all(10)),
+        const Text("Add to balance"),
+        FormInputUser(
+          callback: updateBalanceUsage,
+          textInputType: TextInputType.number,
         ),
         const Padding(padding: EdgeInsets.all(10)),
         SubmitButton(callback: submit),

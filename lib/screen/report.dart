@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wallet_app/components/appbar.dart';
@@ -12,19 +14,21 @@ class Report extends StatefulWidget {
 }
 
 class _ReportState extends State<Report> {
-  List<History> _hist = [];
+  List<History> _allTime = [];
   List<History> _categoryHist = [];
+  List<History> _hist = [];
   @override
   void initState() {
-    _readHistory();
+    _readAllTime();
     _readCategoryHist();
+    _readHist();
     super.initState();
   }
 
-  void _readHistory() async {
+  void _readAllTime() async {
     var temp = await DBProvider().readAllTimeReport();
     setState(() {
-      _hist = temp;
+      _allTime = temp;
     });
   }
 
@@ -35,16 +39,25 @@ class _ReportState extends State<Report> {
     });
   }
 
+  void _readHist() async {
+    var temp = await DBProvider().readHistory();
+    temp.sort((a, b) => b.time.compareTo(a.time));
+    setState(() {
+      _hist = temp;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(title: const Text("Report")),
-        body: Column(
+        body: ListView(
           children: [
-            Expanded(flex: 3, child: _BalanceChart(history: _hist)),
-            Expanded(flex: 3, child: _CategoryBarChart(history: _categoryHist)),
-            Text("Details"),
+            _BalanceChart(history: _allTime),
+            _CategoryBarChart(history: _categoryHist),
+            const Text("Details"),
+            _Details(history: _hist)
           ],
         ),
         bottomNavigationBar: const BottomBar(index: 1),
@@ -95,6 +108,48 @@ class _CategoryBarChart extends StatelessWidget {
           xValueMapper: (History hs, _) => hs.category,
           yValueMapper: (History hs, _) => hs.balanceusage,
         )
+      ],
+    );
+  }
+}
+
+class _Details extends StatelessWidget {
+  final List<History>? history;
+  final Map<String, IconData> trailingIcon = {
+    "Groceries": Icons.local_grocery_store_sharp,
+    "Housing & Utilities": Icons.house_outlined,
+    "Transportation": Icons.emoji_transportation,
+    "Healthcare": Icons.health_and_safety_outlined,
+    "Personal / Other": Icons.category_rounded,
+    "Online services": Icons.wifi,
+  };
+
+  _Details({this.history});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (var e in history!) ...{
+          Container(
+            margin: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: ListTile(
+              leading: Icon(trailingIcon[e.category]),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              trailing: Text(
+                e.category.toString(),
+                style: const TextStyle(fontSize: 15),
+              ),
+              title: Text("${e.time.year}-${e.time.month}-${e.time.day}"),
+              subtitle: Text('VND ${e.balanceusage}'),
+              tileColor: Colors.cyan.shade900,
+            ),
+          ),
+        }
       ],
     );
   }
