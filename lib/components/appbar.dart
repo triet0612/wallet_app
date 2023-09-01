@@ -12,6 +12,8 @@ class BottomBar extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(
             icon: Icon(Icons.insert_chart_outlined_outlined), label: "Report"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.newspaper), label: "Financial news"),
       ],
       currentIndex: index,
       onTap: (pressed) {
@@ -25,6 +27,8 @@ class BottomBar extends StatelessWidget {
           case 1:
             Navigator.of(context).popAndPushNamed('/report');
             break;
+          case 2:
+            Navigator.of(context).popAndPushNamed('/news');
         }
       },
     );

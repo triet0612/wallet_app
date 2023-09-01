@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: const Text("Home"),
+          title: const Text("Wallet app"),
           actions: [
             IconButton(
               icon: const Icon(Icons.account_circle_outlined),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/screen/home.dart';
+import 'package:wallet_app/screen/news.dart';
 import 'package:wallet_app/screen/report.dart';
 import 'package:wallet_app/screen/userinfo.dart';
 
@@ -19,6 +20,7 @@ class MainApp extends StatelessWidget {
         '/': (context) => const Home(),
         '/userpage': (context) => const UserInfo(),
         '/report': (context) => const Report(),
+        '/news': (context) => const NewsReader(),
       },
       theme: ThemeData(
         brightness: Brightness.dark,
