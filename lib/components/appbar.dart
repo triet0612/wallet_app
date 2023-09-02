@@ -8,12 +8,14 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(
             icon: Icon(Icons.insert_chart_outlined_outlined), label: "Report"),
+        BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: "News"),
         BottomNavigationBarItem(
-            icon: Icon(Icons.newspaper), label: "Financial news"),
+            icon: Icon(Icons.shopping_bag), label: "Shopping"),
       ],
       currentIndex: index,
       onTap: (pressed) {
@@ -29,6 +31,10 @@ class BottomBar extends StatelessWidget {
             break;
           case 2:
             Navigator.of(context).popAndPushNamed('/news');
+            break;
+          case 3:
+            Navigator.of(context).popAndPushNamed('/shopping');
+            break;
         }
       },
     );

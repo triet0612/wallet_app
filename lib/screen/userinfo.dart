@@ -60,10 +60,11 @@ class _UserInfoState extends State<UserInfo> {
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context).popAndPushNamed('/');
-                },
-                icon: const Icon(Icons.arrow_back)),
+              onPressed: () {
+                Navigator.of(context).popAndPushNamed('/');
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
             title: const Text("User info"),
           ),
           body: Column(

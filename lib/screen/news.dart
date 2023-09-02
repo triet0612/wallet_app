@@ -54,7 +54,7 @@ class _NewsReaderState extends State<NewsReader> {
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
-            title: const Text("Economic News"),
+            title: const Text("Economic News from VNEXPRESS"),
           ),
           body: ListView(
             children: [

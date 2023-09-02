@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class User {
   final String username;
   final double balance;
@@ -32,5 +34,23 @@ class History {
       'balanceusage': balanceusage,
       'category': category,
     };
+  }
+}
+
+class Books {
+  final String title;
+  final String price;
+  final String link;
+  final String imglink;
+
+  Books({
+    required this.title,
+    required this.price,
+    required this.link,
+    required this.imglink,
+  });
+  @override
+  String toString() {
+    return '$title - $price - $link - $imglink';
   }
 }

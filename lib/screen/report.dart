@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wallet_app/components/appbar.dart';
@@ -55,8 +54,11 @@ class _ReportState extends State<Report> {
           children: [
             _BalanceChart(history: _allTime),
             _CategoryBarChart(history: _categoryHist),
-            const Text("Details"),
-            _Details(history: _hist)
+            Container(
+              alignment: Alignment.center,
+              child: const Text("Details"),
+            ),
+            _Details(history: _hist),
           ],
         ),
         bottomNavigationBar: const BottomBar(index: 1),
@@ -73,20 +75,15 @@ class _BalanceChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SfCartesianChart(
       primaryXAxis: CategoryAxis(labelRotation: 45),
-      primaryYAxis: NumericAxis(
-        rangePadding: ChartRangePadding.round,
-      ),
       title: ChartTitle(text: 'All time balance usage'),
       series: <LineSeries<History, String>>[
         LineSeries(
             markerSettings:
-                MarkerSettings(isVisible: true, color: Colors.pink.shade300),
+                const MarkerSettings(isVisible: true, color: Colors.pinkAccent),
             dataSource: history!,
-            xValueMapper: (History hs, _) {
-              var t = hs.time;
-              return "${t.year}-${t.month}-${t.day}";
-            },
-            yValueMapper: (History hs, _) => hs.balanceusage)
+            xValueMapper: (History hs, _) =>
+                "${hs.time.year}-${hs.time.month}-${hs.time.day}",
+            yValueMapper: (History hs, _) => hs.balanceusage),
       ],
     );
   }
@@ -114,7 +111,7 @@ class _CategoryBarChart extends StatelessWidget {
 
 class _Details extends StatelessWidget {
   final List<History>? history;
-  final Map<String, IconData> trailingIcon = {
+  static const Map<String, IconData> trailingIcon = {
     "Groceries": Icons.local_grocery_store_sharp,
     "Housing & Utilities": Icons.house_outlined,
     "Transportation": Icons.emoji_transportation,
@@ -123,29 +120,22 @@ class _Details extends StatelessWidget {
     "Online services": Icons.wifi,
   };
 
-  _Details({this.history});
+  const _Details({this.history});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         for (var e in history!) ...{
-          Container(
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
+          Card(
             child: ListTile(
               leading: Icon(trailingIcon[e.category]),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
               trailing: Text(
                 e.category.toString(),
                 style: const TextStyle(fontSize: 15),
               ),
               title: Text("${e.time.year}-${e.time.month}-${e.time.day}"),
               subtitle: Text('VND ${e.balanceusage}'),
-              tileColor: Colors.cyan.shade900,
             ),
           ),
         }

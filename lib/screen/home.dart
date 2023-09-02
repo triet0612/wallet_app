@@ -48,9 +48,9 @@ class _HomeState extends State<Home> {
         ),
         body: ListView(
           children: [
-            Expanded(flex: 1, child: _BalanceCard(user: _user)),
-            Expanded(flex: 2, child: _AddHistory()),
-            Expanded(flex: 2, child: _ReportSalary()),
+            _BalanceCard(user: _user),
+            _AddHistory(),
+            _ReportSalary(),
           ],
         ),
         bottomNavigationBar: const BottomBar(index: 0),
