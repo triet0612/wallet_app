@@ -81,6 +81,41 @@ class _UserInfoState extends State<UserInfo> {
                 textInputType: TextInputType.number,
               ),
               SubmitButton(callback: _submitUser),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: RichText(
+                  text: const TextSpan(
+                    text:
+                        "Do this when set up new account, on submit, every old data will be deleted. ",
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: RichText(
+                  text: const TextSpan(
+                    text:
+                        "We do not own any data of users, data sources for news are from https://vnexpress.net/ and for Book shopping page are from https://www.fahasa.com/. Data analystics are done locally for user and is not shared with anyone.",
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: RichText(
+                  text: const TextSpan(
+                    text:
+                        "Our app aims to better manage their money using reports, news and books. We believe that these sources will help people in making better financial decision in the future.",
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: RichText(
+                  text: const TextSpan(
+                    text: "Thanks for using this app and enjoy <3",
+                  ),
+                ),
+              ),
             ],
           ),
         ),

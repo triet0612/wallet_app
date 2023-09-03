@@ -98,14 +98,6 @@ class _AddHistory extends StatefulWidget {
 class _AddHistoryState extends State<_AddHistory> {
   History _history =
       History(time: DateTime.now(), balanceusage: 0, category: "Groceries");
-  List dropdownCategories = [
-    "Groceries",
-    "Housing & Utilities",
-    "Transportation",
-    "Healthcare",
-    "Personal / Other",
-    "Online services",
-  ];
 
   void updateBalanceUsage(value) {
     setState(() {
@@ -144,8 +136,10 @@ class _AddHistoryState extends State<_AddHistory> {
           initialSelection: dropdownCategories.first,
           onSelected: updateCategories,
           dropdownMenuEntries: dropdownCategories
-              .map((value) =>
-                  DropdownMenuEntry<String>(value: value, label: value))
+              .map((value) => DropdownMenuEntry<String>(
+                  value: value,
+                  label: value,
+                  leadingIcon: Icon(trailingIcon[value])))
               .toList(),
         ),
         const Padding(padding: EdgeInsets.all(10)),

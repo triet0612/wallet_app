@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class User {
   final String username;
   final double balance;
@@ -35,20 +37,38 @@ class History {
   }
 }
 
-class Books {
+class ReaderData {
   final String title;
-  final String price;
+  final String subtitle;
   final String link;
   final String imglink;
 
-  Books({
+  ReaderData({
     required this.title,
-    required this.price,
+    required this.subtitle,
     required this.link,
     required this.imglink,
   });
   @override
   String toString() {
-    return '$title - $price - $link - $imglink';
+    return '$title - $subtitle - $link - $imglink';
   }
 }
+
+List dropdownCategories = [
+  "Groceries",
+  "Housing & Utilities",
+  "Transportation",
+  "Healthcare",
+  "Personal / Other",
+  "Online services",
+];
+
+const Map<String, IconData> trailingIcon = {
+  "Groceries": Icons.local_grocery_store_sharp,
+  "Housing & Utilities": Icons.house_outlined,
+  "Transportation": Icons.emoji_transportation,
+  "Healthcare": Icons.health_and_safety_outlined,
+  "Personal / Other": Icons.category_rounded,
+  "Online services": Icons.wifi,
+};

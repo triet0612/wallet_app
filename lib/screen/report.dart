@@ -111,14 +111,6 @@ class _CategoryBarChart extends StatelessWidget {
 
 class _Details extends StatelessWidget {
   final List<History>? history;
-  static const Map<String, IconData> trailingIcon = {
-    "Groceries": Icons.local_grocery_store_sharp,
-    "Housing & Utilities": Icons.house_outlined,
-    "Transportation": Icons.emoji_transportation,
-    "Healthcare": Icons.health_and_safety_outlined,
-    "Personal / Other": Icons.category_rounded,
-    "Online services": Icons.wifi,
-  };
 
   const _Details({this.history});
 
